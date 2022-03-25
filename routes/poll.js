@@ -45,7 +45,7 @@ router.get('/', async (req, res, next) => {
   return res.json(result.rows);
 });
 
-router.post('/', validate(transactionValidation, {statusCode: 422}, {}), async (req, res, next) => {
+router.post('/', validate(pollValidation, {statusCode: 422}, {}), async (req, res, next) => {
   const query = 'INSERT INTO poll (title, username, created_at) VALUES ($1, $2, now())';
 
   const values = [
@@ -58,7 +58,7 @@ router.post('/', validate(transactionValidation, {statusCode: 422}, {}), async (
   return res.status(201).end();
 });
 
-router.patch('/:id', validate(transactionValidation, {statusCode: 422}, {}), async (req, res, next) => {
+router.patch('/:id', validate(pollValidation, {statusCode: 422}, {}), async (req, res, next) => {
   const { id } = req.params;
   const result = await db.query('SELECT * FROM poll WHERE id=$1', [id]);
 
