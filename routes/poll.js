@@ -39,7 +39,7 @@ router.get('/:id/votes', async (req, res, next) => {
   return res.json(result.rows.map(row => ({
     id: row.id,
     count: parseInt(row.vote, 10)
-  });
+  })));
 });
 
 
