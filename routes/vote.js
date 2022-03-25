@@ -25,14 +25,14 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', validate(voteValidation, {statusCode: 422}, {}), async (req, res, next) => {
   const answerId = req.params.answer_id;
-  const result = await db.query('SELECT * FROM answer WHERE id=$1', [answerId]);
+  const answerResult = await db.query('SELECT * FROM answer WHERE id=$1', [answerId]);
   const query = 'INSERT INTO vote (username, poll_id, answer_id, created_at) VALUES ($1, $2, $3, now())';
 
-  if (!result || !result.rows || !result.rows[0]) {
+  if (!answerResult || !answerResult.rows || !answerResult.rows[0]) {
     return res.status(404).end();
   }
 
-  const answer = result.rows[0];
+  const answer = answerResult.rows[0];
 
   const values = [
     req.body.username,
