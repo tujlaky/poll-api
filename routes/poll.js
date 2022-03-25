@@ -6,17 +6,6 @@ const { validate } = require('express-validation');
 
 const { pollValidation } = require('../validators/poll');
 
-router.get('/:id', async (req, res, next) => {
-  const { id } = req.params;
-  const result = await db.query('SELECT * FROM poll WHERE id=$1', [id]);
-
-  if (!result || !result.rows || !result.rows[0]) {
-    return res.status(404).end();
-  }
-
-  return res.json(result.rows[0]);
-});
-
 router.get('/:id/answers', async (req, res, next) => {
   const { id } = req.params;
   const result = await db.query('SELECT * FROM answers WHERE poll_id=$1', [id]);
@@ -37,6 +26,17 @@ router.get('/:id/votes', async (req, res, next) => {
   }
 
   return res.json(result.rows);
+});
+
+router.get('/:id', async (req, res, next) => {
+  const { id } = req.params;
+  const result = await db.query('SELECT * FROM poll WHERE id=$1', [id]);
+
+  if (!result || !result.rows || !result.rows[0]) {
+    return res.status(404).end();
+  }
+
+  return res.json(result.rows[0]);
 });
 
 router.get('/', async (req, res, next) => {
