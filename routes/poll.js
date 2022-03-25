@@ -8,7 +8,7 @@ const { pollValidation } = require('../validators/poll');
 
 router.get('/:id/answers', async (req, res, next) => {
   const { id } = req.params;
-  const result = await db.query('SELECT * FROM answers WHERE poll_id=$1', [id]);
+  const result = await db.query('SELECT * FROM answer WHERE poll_id=$1', [id]);
 
   if (!result || !result.rows || !result.rows[0]) {
     return res.status(404).end();
@@ -19,7 +19,7 @@ router.get('/:id/answers', async (req, res, next) => {
 
 router.get('/:id/votes', async (req, res, next) => {
   const { id } = req.params;
-  const result = await db.query('SELECT a.id as id, COUNT(*) AS votes FROM answers a LEFT JOIN votes v ON (a.id=v.answer_id) GROUP BY a.id WHERE a.poll_id=$1', [id]);
+  const result = await db.query('SELECT a.id as id, COUNT(*) AS vote FROM answer a LEFT JOIN vote v ON (a.id=v.answer_id) GROUP BY a.id WHERE a.poll_id=$1', [id]);
 
   if (!result || !result.rows || !result.rows[0]) {
     return res.status(404).end();
