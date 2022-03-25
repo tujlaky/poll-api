@@ -8,7 +8,7 @@ const { transactionValidation } = require('../validators/transaction');
 
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
-  const result = await db.query('SELECT * FROM transactions WHERE id=$1', [id]);
+  const result = await db.query('SELECT * FROM answer WHERE id=$1', [id]);
 
   if (!result || !result.rows || !result.rows[0]) {
     return res.status(404).end();
@@ -18,24 +18,17 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.get('/', async (req, res, next) => {
-  const result = await db.query('SELECT * FROM transactions ORDER BY completed ASC');
-  const totals = await db.query('SELECT count(*) AS count, sum(amount) AS sum FROM transactions');
+  const result = await db.query('SELECT * FROM answer ORDER BY completed ASC');
 
-  return res.json({
-    items: result.rows,
-    count: parseInt(totals.rows[0].count),
-    total: totals.rows[0].sum
-  });
+  return result.rows;
 });
 
 router.post('/', validate(transactionValidation, {statusCode: 422}, {}), async (req, res, next) => {
-  const query = 'INSERT INTO transactions (name, description, amount, vat, completed) VALUES ($1, $2, $3, $4, now())';
+  const query = 'INSERT INTO answer (title, poll_id, created_at) VALUES ($1, $2, now())';
 
   const values = [
-    req.body.name,
-    req.body.description,
-    req.body.amount,
-    req.body.vat
+    req.body.title,
+    req.body.poll_id,
   ];
 
   const result = await db.query(query, values);
@@ -45,19 +38,16 @@ router.post('/', validate(transactionValidation, {statusCode: 422}, {}), async (
 
 router.patch('/:id', validate(transactionValidation, {statusCode: 422}, {}), async (req, res, next) => {
   const { id } = req.params;
-  const result = await db.query('SELECT * FROM transactions WHERE id=$1', [id]);
+  const result = await db.query('SELECT * FROM answer WHERE id=$1', [id]);
 
   if (!result || !result.rows || !result.rows[0]) {
     return res.status(404).end();
   }
 
-  const query = 'UPDATE transactions SET name=$1, description=$2, amount=$3, vat=$4 WHERE id=$5';
+  const query = 'UPDATE answer SET title=$1 WHERE id=$2';
 
   const values = [
-    req.body.name,
-    req.body.description,
-    req.body.amount,
-    req.body.vat,
+    req.body.title,
     id
   ];
 
@@ -68,13 +58,13 @@ router.patch('/:id', validate(transactionValidation, {statusCode: 422}, {}), asy
 
 router.delete('/:id', async (req, res, next) => {
   const { id } = req.params;
-  const result = await db.query('SELECT * FROM transactions WHERE id=$1', [id]);
+  const result = await db.query('SELECT * FROM answer WHERE id=$1', [id]);
 
   if (!result || !result.rows || !result.rows[0]) {
     return res.status(404).end();
   }
 
-  await db.query('DELETE FROM transactions WHERE id=$1', [id]);
+  await db.query('DELETE FROM answer WHERE id=$1', [id]);
 
   return res.status(204).end();
 });

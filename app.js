@@ -5,7 +5,9 @@ const cors = require('cors');
 const { ValidationError } = require('express-validation');
 
 const indexRouter = require('./routes/index');
-const transactionsRouter = require('./routes/transactions');
+const pollRouter = require('./routes/poll');
+const answerRouter = require('./routes/answer');
+const voteRouter = require('./routes/vote');
 
 const app = express();
 
@@ -18,7 +20,9 @@ app.use(express.urlencoded({ extended: false }));
 
 app.use('/', indexRouter);
 app.use('/doc', express.static('public'));
-app.use('/transactions', transactionsRouter);
+app.use('/poll', pollRouter);
+app.use('/answer', answerRouter);
+app.use('/vote', voteRouter);
 
 app.use((err, req, res, next) => {
   if (err instanceof ValidationError) {
