@@ -4,7 +4,7 @@ const db = require('../db');
 
 const { validate } = require('express-validation');
 
-const { transactionValidation } = require('../validators/transaction');
+const { answerValidation } = require('../validators/answer');
 
 router.get('/:id', async (req, res, next) => {
   const { id } = req.params;
