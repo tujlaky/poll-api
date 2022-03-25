@@ -40,7 +40,7 @@ router.get('/:id/votes', async (req, res, next) => {
 });
 
 router.get('/', async (req, res, next) => {
-  const result = await db.query('SELECT * FROM poll ORDER BY completed ASC');
+  const result = await db.query('SELECT * FROM poll ORDER BY created_at ASC');
 
   return res.json(result.rows);
 });

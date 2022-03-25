@@ -18,7 +18,7 @@ router.get('/:id', async (req, res, next) => {
 });
 
 router.get('/', async (req, res, next) => {
-  const result = await db.query('SELECT * FROM answer ORDER BY completed ASC');
+  const result = await db.query('SELECT * FROM answer ORDER BY created_at ASC');
 
   return result.rows;
 });
