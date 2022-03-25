@@ -30,7 +30,7 @@ router.get('/:id/answers', async (req, res, next) => {
 
 router.get('/:id/votes', async (req, res, next) => {
   const { id } = req.params;
-  const result = await db.query('SELECT a.id as id, COUNT(v.id) AS vote FROM answer a LEFT JOIN vote v ON (a.id=v.answer_id) WHERE a.poll_id=$1 GROUP BY a.id', [id]);
+  const result = await db.query('SELECT a.id as id, a.title as title, COUNT(v.id) AS vote FROM answer a LEFT JOIN vote v ON (a.id=v.answer_id) WHERE a.poll_id=$1 GROUP BY a.id', [id]);
 
   if (!result || !result.rows || !result.rows[0]) {
     return res.status(404).end();
@@ -38,6 +38,7 @@ router.get('/:id/votes', async (req, res, next) => {
 
   return res.json(result.rows.map(row => ({
     id: row.id,
+    title: row.title,
     count: parseInt(row.vote, 10)
   })));
 });
