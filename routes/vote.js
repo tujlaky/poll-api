@@ -20,7 +20,7 @@ router.get('/:id', async (req, res, next) => {
 router.get('/', async (req, res, next) => {
   const result = await db.query('SELECT * FROM vote ORDER BY created_at ASC');
 
-  return result.rows;
+  return res.json(result.rows);
 });
 
 router.post('/', validate(voteValidation, {statusCode: 422}, {}), async (req, res, next) => {
