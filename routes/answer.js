@@ -28,7 +28,7 @@ router.post('/', validate(answerValidation, {statusCode: 422}, {}), async (req, 
   const pollResult = await db.query('SELECT * FROM poll WHERE id=$1', [req.body.poll_id]);
 
 
-  if (!pollResult || !answerResult.rows || !answerResult.rows[0]) {
+  if (!pollResult || !pollResult.rows || !pollResult.rows[0]) {
     return res.status(404).end();
   }
 
