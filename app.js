@@ -18,15 +18,11 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
-try {
-  app.use('/', indexRouter);
-  app.use('/doc', express.static('public'));
-  app.use('/poll', pollRouter);
-  app.use('/answer', answerRouter);
-  app.use('/vote', voteRouter);
-} catch(err) {
-  return res.status(500).json(err);
-}
+app.use('/', indexRouter);
+app.use('/doc', express.static('public'));
+app.use('/poll', pollRouter);
+app.use('/answer', answerRouter);
+app.use('/vote', voteRouter);
 
 app.use((err, req, res, next) => {
   if (err instanceof ValidationError) {
