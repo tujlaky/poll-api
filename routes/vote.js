@@ -29,7 +29,9 @@ router.post('/', validate(voteValidation, {statusCode: 422}, {}), async (req, re
   const query = 'INSERT INTO vote (username, poll_id, answer_id, created_at) VALUES ($1, $2, $3, now())';
 
   if (!answerResult || !answerResult.rows || !answerResult.rows[0]) {
-    return res.status(404).end();
+    return res.status(404).json({
+      error: `Answer not found with id ${answerId}`
+    });
   }
 
   const answer = answerResult.rows[0];

@@ -25,11 +25,14 @@ router.get('/', async (req, res, next) => {
 
 router.post('/', validate(answerValidation, {statusCode: 422}, {}), async (req, res, next) => {
   const query = 'INSERT INTO answer (title, poll_id, created_at) VALUES ($1, $2, now())';
-  const pollResult = await db.query('SELECT * FROM poll WHERE id=$1', [req.body.poll_id]);
+  const pollId = req.body.poll_id;
+  const pollResult = await db.query('SELECT * FROM poll WHERE id=$1', [pollId]);
 
 
   if (!pollResult || !pollResult.rows || !pollResult.rows[0]) {
-    return res.status(404).end();
+    return res.status(404).json({
+      error: `Poll not found with id ${pollId}`
+    });
   }
 
   const values = [
